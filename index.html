@@ -1,0 +1,87 @@
+index.html
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام آدم ⚡</title>
+    <style>
+        :root { --main: #00ffcc; --bg: #0a0a0a; }
+        body {
+            background: var(--bg); color: white; font-family: sans-serif;
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh; margin: 0; overflow: hidden; transition: 0.5s;
+        }
+        #robot {
+            position: absolute; font-size: 1.8rem; background: #111; padding: 20px;
+            border-radius: 20px; border: 2px solid var(--main);
+            box-shadow: 0 0 20px var(--main); z-index: 10;
+            animation: fastFade 2s forwards;
+        }
+        @keyframes fastFade {
+            0% { opacity: 0; transform: scale(0.5); }
+            20% { opacity: 1; transform: scale(1.1); }
+            80% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(1.5); visibility: hidden; }
+        }
+        .card {
+            background: rgba(20,20,20,0.8); width: 280px; padding: 25px;
+            border-radius: 25px; text-align: center; opacity: 0;
+            border: 2px solid var(--main); transition: 0.5s;
+            animation: showCard 0.5s forwards 1.8s;
+        }
+        @keyframes showCard { to { opacity: 1; } }
+        .input-group { display: flex; gap: 8px; margin-bottom: 15px; }
+        input { flex: 1; padding: 12px; border-radius: 10px; border: none; background: #222; color: white; outline: none; }
+        button { background: var(--main); border: none; padding: 10px; border-radius: 10px; cursor: pointer; font-weight: bold; }
+        ul { list-style: none; padding: 0; }
+        li { background: rgba(255,255,255,0.1); margin-bottom: 8px; padding: 10px; border-radius: 12px; display: flex; justify-content: space-between; animation: pop 0.3s; }
+        @keyframes pop { from { transform: scale(0.8); } to { transform: scale(1); } }
+        .del { color: #ff4d4d; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div id="robot">🎁✨ مرحباً سيدي!</div>
+
+    <div class="card" id="mainCard">
+        <h3>مهامي اليومية ✨</h3>
+        <div class="input-group">
+            <input type="text" id="in" placeholder="أضف مهمة...">
+            <button onclick="add()">➕</button>
+        </div>
+        <ul id="list"></ul>
+    </div>
+
+    <script>
+        var input = document.getElementById('in');
+        var list = document.getElementById('list');
+        var card = document.getElementById('mainCard');
+
+        function add() {
+            var val = input.value.trim();
+            if (val === "") return;
+            
+            // تغيير الألوان بطريقة آمنة بدون علامات `
+            var hue = Math.floor(Math.random() * 360);
+            var color = "hsl(" + hue + ", 100%, 50%)";
+            var dark = "hsl(" + hue + ", 100%, 5%)";
+            
+            document.documentElement.style.setProperty('--main', color);
+            document.body.style.background = dark;
+            card.style.borderColor = color;
+            card.style.boxShadow = "0 0 20px " + color;
+
+            // إضافة العنصر
+            var li = document.createElement('li');
+            li.innerHTML = "<span>⚡ " + val + "</span> <span class='del' onclick='this.parentElement.remove()'>✕</span>";
+            list.appendChild(li);
+            input.value = "";
+        }
+
+        input.addEventListener("keypress", function(e) {
+            if(e.key === "Enter") add();
+        });
+    </script>
+</body>
+</html>
